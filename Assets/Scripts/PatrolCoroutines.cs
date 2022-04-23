@@ -10,9 +10,11 @@ public class PatrolCoroutines : MonoBehaviour
 
     private float _waitTime = 1f; // in seconds
 
+    private Coroutine _prevCoroutine;
+
     private void Start()
     {
-        StartCoroutine(_MovingToNextWaypoint());
+        _prevCoroutine = StartCoroutine(_MovingToNextWaypoint());
     }
 
     private IEnumerator _MovingToNextWaypoint()
@@ -29,7 +31,8 @@ public class PatrolCoroutines : MonoBehaviour
         yield return new WaitForSeconds(_waitTime);
         _currentWaypointIndex = (_currentWaypointIndex + 1) % waypoints.Length;
 
-        StartCoroutine(_MovingToNextWaypoint());
+        StopCoroutine(_prevCoroutine);
+        _prevCoroutine = StartCoroutine(_MovingToNextWaypoint());
     }
 
 }
